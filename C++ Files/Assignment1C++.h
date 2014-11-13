@@ -11,7 +11,7 @@ using namespace std;
 /***
 *  update: computes new values for timestep t+delta_t
 ***/
-void update(int nx, int ny, double u1[100][100], double u2[100][100])
+void update(int nx, int ny, double u1[][100], double u2[][100])
 {
     int ix, iy;
 	/* copy boundary conditions from old_u to new_u */
@@ -38,9 +38,9 @@ void update(int nx, int ny, double u1[100][100], double u2[100][100])
 			//Test using Cx & Cy = 0.1 - Needs to come from command line
 			u1[ix][iy] = // Ux,y,t
 			u2[ix][iy] // Ux,y,t−1
-			+ 0.1 * // + Cx *
+			+ nx * // + Cx *
 				(u2[ix+1][iy] + u2[ix-1][iy] - 2 * u2[ix][iy])
-			+ 0.1 * // + Cy *
+			+ ny * // + Cy *
 				(u2[ix][iy+1] + // (Ux,y+1,t−1 + 
 				u2[ix][iy-1] - 2 * u2[ix][iy]); // Ux,y−1,t−1 − 2 * Ux,y,t−1)
 		}
@@ -87,7 +87,7 @@ void initdata(double u1[XDIM][YDIM], char* fname)
 			end.str(val);
 			end>>u1[ix][iy];
 			//u1[ix][iy]=temp;
-			printf("%d \n",(int)u1[ix][iy]);  //FINALLY GOT THIS WORKING, NOW IM DEAD TIRED !!!! STUPID FLOAT PRECISION
+			//printf("%d \n",(int)u1[ix][iy]);  //FINALLY GOT THIS WORKING, NOW IM DEAD TIRED !!!! STUPID FLOAT PRECISION
 			//cout<<"ul["<<ix<<"]["<<iy<<"] is "<<u1[ix][iy]<<'\n';
 			
 		}
@@ -103,10 +103,11 @@ void initdata(double u1[XDIM][YDIM], char* fname)
 void prtdata(int nx, int ny, int ts, double *u1, char* fname)
 {
     int ix, iy;
-    FILE *fp;
- 
-    fp = fopen(fname, "w");
+	FILE *fp;
+	char* ffname = fname;
+	sprintf(fname,"%s%d.csv",fname,ts);
     for (iy = ny-1; iy >= 0; iy--) {
+    fp = fopen(ffname, "w");
         for (ix = 0; ix <= nx-1; ix++) {
             fprintf(fp, "%8.3f,", *(u1+ix*ny+iy));
             if (ix != nx-1) {
