@@ -85,20 +85,24 @@ void prtdata(int nx, int ny, int ts, double *u1, char* fname)
 {
     int ix, iy;
 	FILE *fp;
-	char* ffname = fname;
-	sprintf(fname,"%s%d.csv",fname,ts);
+	char ffname[100];
+	sprintf(ffname,"output/%s%d.csv",fname,ts);
 	fp = fopen(ffname, "w");
-    for (iy = ny-1; iy >= 0; iy--) {
-        for (ix = 0; ix <= nx-1; ix++) {
-            fprintf(fp, "%8.3f,", *(u1+ix*ny+iy));
-            if (ix != nx-1) {
-                fprintf(fp, " ");
-            }
-            else {
-                fprintf(fp, "\n");
-            }
-        }
-    }
+	if(fp!=NULL)
+	{
+		for (iy = ny-1; iy >= 0; iy--) {
+			for (ix = 0; ix <= nx-1; ix++) {
+				fprintf(fp, "%8.3f,", *(u1+ix*ny+iy));
+				if (ix != nx-1) {
+					fprintf(fp, " ");
+				}
+				else {
+					fprintf(fp, "\n");
+				}
+			}
+		}
+	}
+	fflush(fp);
     fclose(fp);
-    printf(" %s\n",fname);
+    printf(" %s\n",ffname);
 }

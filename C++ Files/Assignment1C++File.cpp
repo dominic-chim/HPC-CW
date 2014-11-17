@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
     int it = 0; // Ts iterator
     char *fname= argv[4];
-    char nname[] = "data_";
+    char nname[] = "final_data_";
     
     printf("Starting serial version of 2D temperature distribution example...\n");
  
@@ -44,16 +44,15 @@ int main(int argc, char *argv[])
     // Iterate over all timesteps and create output files
     printf("Iterating over %d time steps...\n", para.nts);
     while(it < para.nts){
-        cout << it << " " << para.nts << endl;
+		it++;
         if(it % 2 == 1){//if timestep is odd 
             update(para.cx,para.cy, old_u, new_u);
+			prtdata(XDIM, YDIM, it, *old_u, nname);
         } else {// if timestep is even 
             update(para.cx,para.cy, new_u, old_u);
-        }
-        it++;
+			prtdata(XDIM, YDIM, it, *new_u, nname);
+        } 
     }
-
-    prtdata(XDIM, YDIM, it, *old_u, nname);
     printf("Done. Created output file: %d\n", it);
 
 	getchar();
