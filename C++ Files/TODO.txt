@@ -2,8 +2,4 @@ TODO
 	Convert to C program
 	Comment and describe all functions
 	Pass in pointers to data structures for update & print
-	Remove commented out lines
-	Print out all nTs of function to CSV
-		Correctly - Pass current data structure - Dependant on nTs
-	Correctly use args and put in to params
 	Create readme file
