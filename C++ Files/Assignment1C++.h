@@ -1,6 +1,5 @@
 #include <fstream>
-#include <sstream>
-#include <string>
+//#include <sstream>
 #include <stdio.h>
 #include <iostream>
 using namespace std;
@@ -14,6 +13,8 @@ using namespace std;
 ***/
 void update(double nx, double ny, double u1[][100], double u2[][100])
 {
+
+	cout << "U2: " << u2[10][10] << endl;
     int ix, iy;
 
 	/* copy boundary conditions from old_u to new_u */
@@ -48,33 +49,45 @@ void update(double nx, double ny, double u1[][100], double u2[][100])
 ***/
 void initdata(double u1[XDIM][YDIM], char* fname)
 {
-	int ix, iy;
-	ifstream fp(fname);
-	
+	int i=0,j=0;
+	FILE *fp = fopen(fname,"r");
 	if (!fp)
 	{
 	  fprintf(stderr, "Can't open input file %s!\n",fname);
 	  exit(1);
 	}
 	
-	for(ix=0;ix<XDIM;ix++)
-	{
-		string line;
-		getline(fp,line);
-		stringstream src (line);
-		
-		for(iy=0;iy<YDIM;iy++)
+	char *line, *temp,*data;
+	char *record;
+	char buffer[2048];
+	double val;
+	
+	while((line=fgets(buffer,sizeof(buffer),fp))!=NULL)
+   	{
+		//cout<<line<<"\n\n\n";
+		record = strtok(line,",");
+		while(record != NULL)
 		{
-			string val;
-			int temp=0;
-			getline(src,val,',');
-			stringstream end;
-			end.clear();
-			end.str("");
-			end.str(val);
-			end>>u1[ix][iy];			
-		}		
-	}
+			if(j >= XDIM){//Break for last comma
+				break;
+			}
+			//cout << i << " " << j << endl;
+			//printf("record : %s\n",record) ;    //here you can put the record into the array as per your requirement.
+			u1[i][j] = atoi(record);
+			//cout << atof(record) << endl;
+			record = strtok(NULL,",");
+			//printf("%g \n", u1[i][j]);
+			j++;
+   		}
+		j = 0;
+		i++;
+   }
+
+  //  	for(int p = 1; p < XDIM; p++){
+  //  		for(int q = 1; q < XDIM; q++){
+  //  			cout << u1[p][q] << endl;
+		// }
+  //  	}
 }
 
 
